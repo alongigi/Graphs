@@ -1,0 +1,45 @@
+#!/bin/bash
+
+clear
+## TEST REGULAR GRAPH ##
+
+echo -e "V:V1\nV:V2\nV:V3\nE:V1,V2,2\nE:V1,V3,7\nE:V2,V3,3" > mygraph
+
+#REGULAR GRAPH - TEST 1#
+ANSWER=$((valgrind --leak-check=yes ./ProgramGraph mygraph -r -bfs V1 V3) |tail -n 10)
+echo $ANSWER 
+echo "Sould print: V1,V3"
+
+#REGULAR GRAPH - TEST 2#
+ANSWER=$(valgrind --leak-check=yes ./ProgramGraph mygraph -ssss -bfs V1 V3)
+echo $ANSWER
+echo "Sould print: Invalid Parameter Syntax"
+
+#REGULAR GRAPH - TEST 3#
+ANSWER=$(valgrind --leak-check=yes ./ProgramGraph mygraphsssss -r -bfs V1 V3)
+echo $ANSWER
+echo "Sould print: Error: mygraphsssss is not a valid file path."
+
+#REGULAR GRAPH - TEST 4#
+ANSWER=$(valgrind --leak-check=yes ./ProgramGraph mygraph -r -ssss V1 V3)
+echo $ANSWER
+echo "Sould print: Exception: Invalid search type"
+
+#REGULAR GRAPH - TEST 5#
+ANSWER=$(valgrind --leak-check=yes ./ProgramGraph mygraph -r -bfs V1 Vsssss)
+echo $ANSWER
+echo "Sould print: Exception: Vertice Vsssss undefined"
+
+#REGULAR GRAPH - TEST 6#
+ANSWER=$(valgrind --leak-check=yes ./ProgramGraph mygraph -r -bfs Vssss V3)
+echo $ANSWER
+echo "Sould print: Exception: Vertice Vssss undefined"
+
+echo -e "C:V1\nC:V2\nC:V3\nR:V1,V2,2.04,13.4,1.3\nR:V1,V3,7.3,41.2,3.2\nR:V2,V3,3.45,3.2,3" > mygraph
+#REGULAR GRAPH - TEST 7#
+ANSWER=$(valgrind --leak-check=yes ./ProgramGraph mygraph -r -bfs Vssss V3)
+echo $ANSWER
+echo "Sould print: Exception: Vertice Vssss undefined"
+
+rm -f mygraph
+
